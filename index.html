@@ -1,5 +1,86 @@
-<!-- EXAMPLE ZIP CODE FORM -->
-<form action="results.html" method="post">
-Zip Code: <input type="text" name="zipcode" size="10" maxlength="5" /><br />
-<input type="submit" name="search" value="Get Quotes" class='submit' />
-</form>
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <style>
+		.content{
+			margin: 0 auto;
+			width: 800px;
+		}
+		.card-link{
+			float: right;
+		}
+		</style>
+
+		<script>
+		function resData(results){
+			console.log(results);
+			var listings = results.listings.map(function(list){
+	    var html = [
+				'<div class="card">',
+				'<div class="card-block">',
+				'<h4 class="card-title">'+list.listingTitle+'</h4>',
+				'<p class="card-text">'+list.listingDescription+'</p>',
+				'<a href="#" class="card-image"><img src="'+list.logo+'" /></a>',
+				'<a href="'+list.linkbtn.btnclick
+				url+'" class="card-link"><img src="'+list.linkbtn.btnurl+'" /></a>',
+				'</div></div>'].join('');
+      return html;
+		});
+			var tplHeader = '<h1>'+ results.listingheader +'</h1>';
+			var tplFooter = '<p>'+ results.listingfooter +'</p>';
+			document.querySelector('.title').innerHTML = tplHeader;
+			document.querySelector('.footer').innerHTML = tplFooter;
+			document.querySelector('.list').innerHTML = listings;
+		}
+		</script>
+	</head>
+	<body>
+		<div class="container">
+			<div class="row">
+				<div class="col-7">
+					<form style='width:400px;margin:1% auto;text-align:center'>
+					Zip Code: <input type="text" name="zipcode" size="10" maxlength="5" class="zipcode form-control" /><br />
+					<Button type="submit" class="btn btn-primary">Get Quotes</Button>
+					</form>
+				</div>
+			</div>
+     <div class="row">
+			 <div class="col-9 content">
+				 <div class='title'></div>
+				 <div class="list"></div>
+				 <div class="footer"></div>
+			 </div>
+		 </div>
+    </div>
+
+	</body>
+	<script>
+
+	(function(){
+
+		var button = document.querySelector("button");
+
+		function buildURL(zipcode){
+			return 'http://www.nextinsure.com/ListingDisplay/Display/Default.aspx?json2=1&src=639168&zip='+ zipcode +'&res=2&seg_frm_req=false&mobilecheck=0&localdt=6%2F16%2F2017%2012%3A22%3A14&rnd=12:22:771&callback=resData';
+		}
+
+		button.addEventListener("click", function(e) {
+			e.preventDefault();
+     var zipcode = document.querySelector('.zipcode').value;
+		 if(zipcode === ''){
+			 alert('not so fast.. zipcode please!');
+			 return false;
+		 }
+		 var BASE_URL = buildURL(zipcode);
+		 var script= document.createElement("script");
+		 script.src = BASE_URL;
+		 document.getElementsByTagName("head")[0].appendChild(script);
+  });
+
+	})();
+	</script>
+
+</html>
